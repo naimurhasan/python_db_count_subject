@@ -22,7 +22,7 @@ def dict_factory(cursor, row):
 
 
 def main():
-    con = sqlite3.connect('quiz_app_9.db')
+    con = sqlite3.connect('quiz.db')
     cur = con.cursor()
     cur.row_factory = dict_factory
 
@@ -42,21 +42,21 @@ def main():
 
         for value in tqdm(table_ids):
             # GET THE COUNT 1
-            query = f"SELECT count('question') as count FROM {TABLE_QUESTION} WHERE {column_name}={value['id']} AND table_id=1"
+            query = f"SELECT count(*) as count FROM {TABLE_QUESTION} WHERE {column_name}={value['id']} AND table_id=1"
             # print('query ', query)
             cur.execute(query)
             count_for_id = cur.fetchall()
-            # print(f"count for id {value['id']}: {count_for_id[0]['count']}")
+            print(f"count for id {value['id']}: {count_for_id[0]['count']}")
 
             # GET THE COUNT 2
             query = f"SELECT count('question') as count FROM {TABLE_QUESTION} WHERE {column_name}={value['id']} AND table_id=2"
-            # print('query ', query)
+            # # print('query ', query)
             cur.execute(query)
             count2_for_id = cur.fetchall()
-            # print(f"count2 for id {value['id']}: {count2_for_id[0]['count']}")
+            print(f"count2 for id {value['id']}: {count2_for_id[0]['count']}")
 
             # SET THE COUNT 1 AND 2
-            query = f"UPDATE {table_name} SET count={count_for_id[0]['count']}, count_2={count2_for_id[0]['count']}"
+            query = f"UPDATE {table_name} SET count={count_for_id[0]['count']}, count_2={count2_for_id[0]['count']} where id={value['id']}"
             # print('set query, ', query)
             cur.execute(query)
 
